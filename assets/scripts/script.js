@@ -96,8 +96,10 @@ function showWeather(city){
             $("#current-wind").text("");
             $("#current-date").text("");
             $("#current-icon").attr("src", "");
+            $("#current-icon").attr("alt", "...");
             $("#current-uv").text("");
             $("#current-bg").attr("src", "assets/images/no_data.jpg");
+            $("#current-bg").attr("alt", "no weather image");
         }
     }).then(function(response) {
         console.log("Current Weather Response:");
@@ -115,9 +117,11 @@ function showWeather(city){
         var icon = response.weather[0].icon;
         var iconURL = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
         $("#current-icon").attr("src", iconURL);
+        $("#current-icon").attr("alt", "weather icon");
 
         var bgURL = getBgURL(icon);
         $("#current-bg").attr("src", bgURL);
+        $("#current-bg").attr("alt", "weather background image");
 
         var lon = response.coord.lon;
         var lat = response.coord.lat;
@@ -150,7 +154,9 @@ function showForecast(city){
                 $("#forecast-humidity-" + i).text("");
                 $("#forecast-date-" + i).text("");
                 $("#forecast-icon-" + i).attr("src", "");
+                $("#forecast-icon-" + i).attr("alt", "...");
                 $("#forecast-bg-" + i).attr("src", "assets/images/no_data.jpg");
+                $("#forecast-bg-" + i).attr("alt", "no weather image");
             }
             $("#carouselExampleIndicators").carousel(0);
         }
@@ -169,9 +175,11 @@ function showForecast(city){
             var icon = response.list[timeIndex].weather[0].icon;
             var iconURL = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
             $("#forecast-icon-" + i).attr("src", iconURL);
+            $("#forecast-icon-" + i).attr("alt", "weather icon");
 
             var bgURL = getBgURL(icon);
             $("#forecast-bg-" + i).attr("src", bgURL);
+            $("#forecast-bg-" + i).attr("alt", "weather background image");
         }  //end for loop
 
         $("#carouselExampleIndicators").carousel(0);
