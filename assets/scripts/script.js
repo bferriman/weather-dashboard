@@ -207,18 +207,11 @@ $(document).ready(function() {
 
     loadCities();
 
-    //try to get the user's location
-
-    //load user's current location if possible
-    //else load most recently viewed city
+    //load most recently viewed city
     console.log(userCities[0]);
-    if (userCities[0] === undefined){
-        //what should we do here?
-    }
-    else {
+    if (userCities[0] !== undefined){
         displayCityData(userCities[0]);
     }
-    //else display...something else?
 
     //create event listener for city submit button
     $("#city-submit").on("click", function(){
@@ -226,8 +219,10 @@ $(document).ready(function() {
         var city = $("#city-input").val();
         $("#city-input").val("");  //clear input field
 
-        addCity(city);
-        displayCityData(city);
+        if(city !== ""){
+            addCity(city);
+            displayCityData(city);
+        }
     });
 
     $(document).on("click", ".city-div", function(event){
