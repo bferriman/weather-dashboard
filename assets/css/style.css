@@ -1,13 +1,14 @@
-/* .daily-forecast {
-    width: 200px;
-} */
+#input-div {
+  margin:8px 0px 18px 0px;
+}
 
-/* .scrolling-wrapper-flexbox {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-  
-    .card {
-      flex: 0 0 auto;
-    }
-} */
+.city-div {
+  height: 50px;
+  background-color: purple;
+  border: 2px solid orange;
+  border-radius: .75rem;
+  font-size: 28px;
+  line-height: 46px;
+  padding: 0px 12px;
+  margin: 6px 0px;
+}

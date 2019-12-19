@@ -32,7 +32,7 @@ function displayCityData(city){
     showForecast(city);
 }
 
-function getIconURL(icon){
+function getBgURL(icon){
 
     var url = "";
 
@@ -89,7 +89,15 @@ function showWeather(city){
         url: queryURL,
         method: "GET",
         error: function(){
+            $("#city-name").text("City Not Found");
             $("#help-text").text("City Not Found");
+            $("#current-temp").text("");
+            $("#current-humidity").text("");
+            $("#current-wind").text("");
+            $("#current-date").text("");
+            $("#current-icon").attr("src", "");
+            $("#current-uv").text("");
+            $("#current-bg").attr("src", "assets/images/no_data.jpg");
         }
     }).then(function(response) {
         console.log("Current Weather Response:");
@@ -108,7 +116,7 @@ function showWeather(city){
         var iconURL = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
         $("#current-icon").attr("src", iconURL);
 
-        var bgURL = getIconURL(icon);
+        var bgURL = getBgURL(icon);
         $("#current-bg").attr("src", bgURL);
 
         var lon = response.coord.lon;
@@ -135,7 +143,17 @@ function showForecast(city){
 
     $.ajax({
         url: queryURL,
-        method: "GET"
+        method: "GET",
+        error: function(){
+            for(var i = 0; i < 5; i++){
+                $("#forecast-temp-" + i).text("");
+                $("#forecast-humidity-" + i).text("");
+                $("#forecast-date-" + i).text("");
+                $("#forecast-icon-" + i).attr("src", "");
+                $("#forecast-bg-" + i).attr("src", "assets/images/no_data.jpg");
+            }
+            $("#carouselExampleIndicators").carousel(0);
+        }
     }).then(function(response){
         console.log("Five Day Forecast Response:");
         console.log(response);
@@ -152,7 +170,7 @@ function showForecast(city){
             var iconURL = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
             $("#forecast-icon-" + i).attr("src", iconURL);
 
-            var bgURL = getIconURL(icon);
+            var bgURL = getBgURL(icon);
             $("#forecast-bg-" + i).attr("src", bgURL);
         }  //end for loop
 
