@@ -22,7 +22,63 @@ function buildCityDiv(city){
     var newDiv = $("<div>");
     newDiv.text(city);
     newDiv.attr("id", city);
+    newDiv.attr("class", "city-div");
     return newDiv;
+}
+
+function displayCityData(city){
+    $("#city-name").text(city);
+    showWeather(city);
+    showForecast(city);
+}
+
+function getIconURL(icon){
+
+    var url = "";
+
+    switch(icon) {
+
+        case "01d":
+        case "01n":
+            url = "assets/images/clear_sky.jpg";
+            break;
+
+        case "02d":
+        case "02n":
+            url = "assets/images/partly_cloudy.jpg";
+            break;
+
+        case "03d":
+        case "03n":
+        case "04d":
+        case "04n":
+            url = "assets/images/cloudy.jpg";
+            break;
+
+        case "09d":
+        case "09n":
+        case "10d":
+        case "10n":
+            url = "assets/images/rain.jpg";
+            break;
+
+        case "11d":
+        case "11n":
+            url = "assets/images/storm.jpg";
+            break;
+
+        case "13d":
+        case "13n":
+            url = "assets/images/snow.jpg";
+            break;
+
+        case "50d":
+        case "50n":
+            url = "assets/images/mist.jpg";
+            break;
+    }
+
+    return url;
 }
 
 function showWeather(city){
@@ -38,15 +94,23 @@ function showWeather(city){
     }).then(function(response) {
         console.log("Current Weather Response:");
         console.log(response);
-        addCity(city);      //These functions are here just so that they're not called if the first
-        showForecast(city); //ajax call returns an error
+        $("#help-text").text("");  //clear error text on successful call
 
-        var temperature = response.main.temp;
-        console.log("Temp (F): " + temperature);
-        var humidity = response.main.humidity;
-        console.log("Humidity: " + humidity);
-        var wind = response.wind.speed;
-        console.log("Wind spd: " + wind);
+        $("#current-temp").text("Temperature: " + parseInt(response.main.temp) + "°F");
+        $("#current-humidity").text("Humidity: " + response.main.humidity + "%");
+        $("#current-wind").text("Wind Speed: " + parseInt(response.wind.speed) + " MPH");
+
+        var date = moment.unix(response.dt);
+        var dateStr = date.format("M/D/YYYY");
+        $("#current-date").text(dateStr);
+
+        var icon = response.weather[0].icon;
+        var iconURL = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
+        $("#current-icon").attr("src", iconURL);
+
+        var bgURL = getIconURL(icon);
+        $("#current-bg").attr("src", bgURL);
+
         var lon = response.coord.lon;
         var lat = response.coord.lat;
 
@@ -61,7 +125,7 @@ function showWeather(city){
         }).then(function(response) {
             console.log(response);
             var uvIndex = response.value;
-            console.log("UV Index: " + uvIndex);
+            $("#current-uv").text("UV Index: " + uvIndex);
         });
     });
 }
@@ -79,59 +143,19 @@ function showForecast(city){
         for(var i = 0; i < 5; i++){
             timeIndex = i * 8 + 7;
 
-            $("#forecast-temp-" + i).text(response.list[timeIndex].main.temp);
-            $("#forecast-humidity-" + i).text(response.list[timeIndex].main.humidity);
-            $("#forecast-date-" + i).text(response.list[timeIndex].dt_txt);
+            $("#forecast-temp-" + i).text("Temperature: " + parseInt(response.list[timeIndex].main.temp) + "°F");
+            $("#forecast-humidity-" + i).text("Humidity: " + response.list[timeIndex].main.humidity + "%");
+            var date = moment.unix(response.list[timeIndex].dt);
+            var dateStr = date.format("M/D/YYYY");
+            $("#forecast-date-" + i).text(dateStr);
             var icon = response.list[timeIndex].weather[0].icon;
-            var iconURL = "http://openweathermap.org/img/wn/" + icon + ".png";
+            var iconURL = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
             $("#forecast-icon-" + i).attr("src", iconURL);
 
-            var bgURL = "";
-
-            switch(icon) {
-
-                case "01d":
-                case "01n":
-                    bgURL = "assets/images/clear_sky.jpg";
-                    break;
-
-                case "02d":
-                case "02n":
-                    bgURL = "assets/images/partly_cloudy.jpg";
-                    break;
-
-                case "03d":
-                case "03n":
-                case "04d":
-                case "04n":
-                    bgURL = "assets/images/cloudy.jpg";
-                    break;
-
-                case "09d":
-                case "09n":
-                case "10d":
-                case "10n":
-                    bgURL = "assets/images/rain.jpg";
-                    break;
-
-                case "11d":
-                case "11n":
-                    bgURL = "assets/images/storm.jpg";
-                    break;
-
-                case "13d":
-                case "13n":
-                    bgURL = "assets/images/snow.jpg";
-                    break;
-
-                case "50d":
-                case "50n":
-                    bgURL = "assets/images/mist.jpg";
-                    break;
-            }
-
+            var bgURL = getIconURL(icon);
             $("#forecast-bg-" + i).attr("src", bgURL);
         }  //end for loop
+
         $("#carouselExampleIndicators").carousel(0);
     });
 }
@@ -174,8 +198,7 @@ $(document).ready(function() {
         //what should we do here?
     }
     else {
-        showWeather(userCities[0]);
-        showForecast(userCities[0]);
+        displayCityData(userCities[0]);
     }
     //else display...something else?
 
@@ -185,14 +208,12 @@ $(document).ready(function() {
         var city = $("#city-input").val();
         $("#city-input").val("");  //clear input field
 
-        //validate input
-
-        //call showWeather, and capture bool return value (false for city not found)
-        showWeather(city);
-        //call showForecast, and capture bool return value
-
-        //if city is found, add city and show its weather data
-
-        
+        addCity(city);
+        displayCityData(city);
     });
+
+    $(document).on("click", ".city-div", function(event){
+        var city = $(this).text();
+        displayCityData(city);
+    })
 });
