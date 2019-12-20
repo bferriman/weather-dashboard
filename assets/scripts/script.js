@@ -2,10 +2,6 @@ var APIKey = "823016d80c8b85490616d6e0ed68f34a";
 userCities = [];
 
 
-function getLocation(){
-
-}
-
 function loadCities(){
     //get city array from localStorage
     var citiesStr = localStorage.getItem("cities");
@@ -164,7 +160,7 @@ function showForecast(city){
                 $("#forecast-bg-" + i).attr("src", "assets/images/no_data.jpg");
                 $("#forecast-bg-" + i).attr("alt", "no weather image");
             }
-            $("#carouselExampleIndicators").carousel(0);
+            $("#carouselIndicatorsDiv").carousel(0);
         }
     }).then(function(response){
 
@@ -186,7 +182,7 @@ function showForecast(city){
             $("#forecast-bg-" + i).attr("alt", "weather background image");
         }
 
-        $("#carouselExampleIndicators").carousel(0);
+        $("#carouselIndicatorsDiv").carousel(0);
     });
 }
 
