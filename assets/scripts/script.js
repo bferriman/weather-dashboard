@@ -82,7 +82,6 @@ function getBgURL(icon){
 }
 
 function showWeather(city){
-    console.log("Showing weather!");
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=" + APIKey;
 
     $.ajax( {
@@ -97,13 +96,13 @@ function showWeather(city){
             $("#current-date").text("");
             $("#current-icon").attr("src", "");
             $("#current-icon").attr("alt", "...");
+            $("#uv-label").text("");
             $("#current-uv").text("");
             $("#current-bg").attr("src", "assets/images/no_data.jpg");
             $("#current-bg").attr("alt", "no weather image");
         }
     }).then(function(response) {
-        console.log("Current Weather Response:");
-        console.log(response);
+
         $("#help-text").text("");  //clear error text on successful call
 
         $("#current-temp").text("Temperature: " + parseInt(response.main.temp) + "°F");
@@ -135,9 +134,16 @@ function showWeather(city){
                 console.log("UV Index call failed");
             }
         }).then(function(response) {
-            console.log(response);
             var uvIndex = response.value;
-            $("#current-uv").text("UV Index: " + uvIndex);
+            var uvColor = "";
+            if(uvIndex < 3){ uvColor = "green";}
+            else if(uvIndex < 6){ uvColor = "yellow";}
+            else if(uvIndex < 8){ uvColor = "orange";}
+            else if(uvIndex < 11){ uvColor = "red";}
+            else{ uvColor = "violet";}
+            $("#uv-label").text("UV Index: ");
+            $("#current-uv").text(uvIndex);
+            $("#current-uv").attr("style", "background-color: " + uvColor);
         });
     });
 }
@@ -161,8 +167,6 @@ function showForecast(city){
             $("#carouselExampleIndicators").carousel(0);
         }
     }).then(function(response){
-        console.log("Five Day Forecast Response:");
-        console.log(response);
 
         for(var i = 0; i < 5; i++){
             timeIndex = i * 8 + 7;
@@ -180,7 +184,7 @@ function showForecast(city){
             var bgURL = getBgURL(icon);
             $("#forecast-bg-" + i).attr("src", bgURL);
             $("#forecast-bg-" + i).attr("alt", "weather background image");
-        }  //end for loop
+        }
 
         $("#carouselExampleIndicators").carousel(0);
     });
@@ -216,7 +220,6 @@ $(document).ready(function() {
     loadCities();
 
     //load most recently viewed city
-    console.log(userCities[0]);
     if (userCities[0] !== undefined){
         displayCityData(userCities[0]);
     }
@@ -236,5 +239,5 @@ $(document).ready(function() {
     $(document).on("click", ".city-div", function(event){
         var city = $(this).text();
         displayCityData(city);
-    })
+    });
 });
