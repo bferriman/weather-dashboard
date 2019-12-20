@@ -32,6 +32,13 @@ Search button icon is from [Font Awesome](https://fontawesome.com/).
 
 Color scheme chosen with the help of [Colormind](http://colormind.io/).
 
+Photos are from [Pexels.com](pexels.com):
+    - [Skitterphoto](https://www.pexels.com/@skitterphoto)
+    - [Lukas](https://www.pexels.com/@goumbik)
+    - [Pixabay](https://www.pexels.com/@pixabay)
+    - [eberhard grossgasteiger](https://www.pexels.com/@eberhardgross)
+    - [Frank Cone](https://www.pexels.com/@frank-cone-140140)
+
 ## Reference Sources Used
 
 [w3schools.com](https://www.w3schools.com/)
