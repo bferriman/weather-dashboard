@@ -1,5 +1,6 @@
 # weather-dashboard
-displays current weather and forecast for user-selected city
+
+Deployed on GitHub Pages at [https://bferriman.github.io/weather-dashboard/](https://bferriman.github.io/weather-dashboard/).
 
 ## Description
 
